@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA 24-Hour Reporting Kit — EU Cyber Resilience Act Article 14</title>
+<meta name="description" content="The EU Cyber Resilience Act's 24-hour reporting obligation went live on 11 September 2026. A free tool to find your exposure, and a practical kit for the decision and the filing.">
+<link rel="canonical" href="https://cra.toledotechnologies.com/">
+<meta property="og:title" content="CRA 24-Hour Reporting Kit — EU Cyber Resilience Act Article 14">
+<meta property="og:description" content="Article 14 reporting went live 11 September 2026. Free scanner + the process kit for the 24/72/14 clock.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cra.toledotechnologies.com/">
+<style>
+:root{
+  --ink:#0b0f14; --ink2:#1a212b; --paper:#fbfaf8; --line:#e3e0da;
+  --accent:#8b1e1e; --accent2:#b8860b; --muted:#5c6673; --ok:#1e6b3a;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font:16.5px/1.65 ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+}
+.mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+header{border-bottom:1px solid var(--line);background:#fff}
+.brand{display:flex;align-items:baseline;justify-content:space-between;padding:16px 0;gap:16px;flex-wrap:wrap}
+.brand a.logo{color:var(--ink);text-decoration:none;font-weight:700;letter-spacing:-.02em;font-size:15px}
+.brand .co{color:var(--muted);font-size:13px}
+.live{
+  display:inline-flex;align-items:center;gap:7px;background:#fff5f5;border:1px solid #f0d5d5;
+  color:var(--accent);padding:5px 11px;border-radius:100px;font-size:12.5px;font-weight:600;
+  font-family:ui-sans-serif,system-ui,sans-serif;letter-spacing:.01em
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:clamp(30px,5.2vw,46px);line-height:1.14;letter-spacing:-.025em;margin:34px 0 18px;font-weight:700}
+h2{font-size:25px;letter-spacing:-.018em;margin:52px 0 14px;font-weight:700;line-height:1.25}
+h3{font-size:18px;margin:30px 0 8px;font-weight:700}
+p{margin:0 0 17px}
+.lead{font-size:19.5px;color:var(--ink2);line-height:1.6}
+.sub{color:var(--muted);font-size:15px}
+a{color:var(--accent);text-underline-offset:2.5px}
+hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+code{background:#f2efe9;padding:2px 6px;border-radius:4px;font-size:.87em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{
+  background:var(--ink);color:#e8e6e1;padding:17px 19px;border-radius:9px;overflow-x:auto;
+  font-size:13.2px;line-height:1.55;font-family:ui-monospace,Menlo,Consolas,monospace;margin:0 0 18px
+}
+pre .r{color:#ff8a8a;font-weight:600}
+pre .y{color:#ffd479}
+pre .g{color:#8fdc9a}
+pre .d{color:#8b95a3}
+blockquote{margin:22px 0;padding:3px 0 3px 20px;border-left:3px solid var(--accent2);color:var(--ink2);font-style:italic}
+.clock{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:26px 0
+}
+.clock div{background:#fff;padding:17px 15px;text-align:center}
+.clock .n{font-size:27px;font-weight:700;letter-spacing:-.03em;font-family:ui-sans-serif,system-ui,sans-serif}
+.clock .l{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:5px;font-family:ui-sans-serif,system-ui,sans-serif;font-weight:600}
+.box{border:1px solid var(--line);border-radius:11px;padding:26px;background:#fff;margin:26px 0}
+.buy{border:2px solid var(--ink);border-radius:12px;padding:0;background:#fff;margin:26px 0;overflow:hidden}
+.buy-h{padding:24px 26px 20px;border-bottom:1px solid var(--line)}
+.buy-b{padding:22px 26px 26px}
+.price{font-size:38px;font-weight:700;letter-spacing:-.03em;font-family:ui-sans-serif,system-ui,sans-serif;line-height:1}
+.price small{font-size:14.5px;font-weight:500;color:var(--muted);letter-spacing:0}
+ul{padding-left:20px;margin:0 0 17px}
+li{margin-bottom:8px}
+.tick{list-style:none;padding:0}
+.tick li{padding-left:27px;position:relative;margin-bottom:10px}
+.tick li:before{content:"";position:absolute;left:2px;top:.55em;width:11px;height:6px;border-left:2.2px solid var(--ok);border-bottom:2.2px solid var(--ok);transform:rotate(-45deg)}
+footer{border-top:1px solid var(--line);margin-top:64px;padding:30px 0 52px;color:var(--muted);font-size:13.5px;background:#fff}
+.small{font-size:13.5px;color:var(--muted);line-height:1.6}
+.pp{min-height:52px;margin-top:6px}
+.note{background:#fffdf5;border:1px solid #eadfbd;border-radius:9px;padding:15px 18px;font-size:14.5px;color:#5a4a1f;margin:20px 0}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.7px}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif}
+.cta{
+  display:inline-block;background:var(--ink);color:#fff;text-decoration:none;padding:12px 22px;
+  border-radius:8px;font-weight:600;font-size:15px;font-family:ui-sans-serif,system-ui,sans-serif
+}
+.cta:hover{background:var(--ink2)}
+#thanks{display:none;border:2px solid var(--ok);border-radius:12px;padding:28px;background:#f4fbf6;margin:26px 0}
+#thanks h2{margin-top:0;color:var(--ok)}
+.dl{display:inline-block;background:var(--ok);color:#fff;text-decoration:none;padding:13px 24px;border-radius:8px;font-weight:700;font-family:ui-sans-serif,system-ui,sans-serif;margin:8px 8px 8px 0}
+@media(max-width:560px){.clock{grid-template-columns:1fr}.buy-h,.buy-b{padding-left:19px;padding-right:19px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <a class="logo" href="/">CRA&nbsp;24-Hour&nbsp;Reporting&nbsp;Kit</a>
+    <span class="co">Toledo Technologies LLC</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <p style="margin-top:26px"><span class="live"><span class="dot"></span>Article 14 has been in force since 11 September 2026</span></p>
+
+  <h1>Something you ship is being exploited. You have 24 hours.</h1>
+
+  <p class="lead">On 11 September 2026 the EU Cyber Resilience Act's reporting obligations became
+  enforceable. If a vulnerability in a product you've placed on the EU market is being
+  <em>actively exploited</em>, you owe an early warning to your national CSIRT and ENISA
+  within 24 hours of becoming aware.</p>
+
+  <p>Most of the CRA doesn't bite until December 2027. This part is live now — and it
+  applies to products you shipped <em>years</em> ago that are still on the market.</p>
+
+  <div class="clock">
+    <div><div class="n">24h</div><div class="l">Early warning</div></div>
+    <div><div class="n">72h</div><div class="l">Notification</div></div>
+    <div><div class="n">14d</div><div class="l">Final report</div></div>
+  </div>
+
+  <p class="small">Legal basis: Regulation (EU) 2024/2847, Article 14. Penalties for
+  non-compliance can reach €15 million or 2.5% of worldwide annual turnover. Products
+  already on the market before the deadline are in scope (Article 69(3)).</p>
+
+  <hr>
+
+  <h2>First: do you even have a problem?</h2>
+
+  <p>Start with the free part. <code>cra-watch</code> reads your lockfiles, resolves them
+  against OSV.dev, and intersects the result with the CISA Known Exploited Vulnerabilities
+  catalogue — the closest public register of what is genuinely being exploited in the wild.</p>
+
+  <p>Not "here are 400 CVEs, good luck." One question: <strong>is any of it on the
+  known-exploited list today?</strong></p>
+
+<pre><span class="d">$ cra-watch scan</span>
+
+  Advisories  13 component(s) carry at least one known advisory
+  KEV feed    1709 entries, catalogue 2026.09.11
+
+  <span class="g">NO KEV MATCHES.</span>
+
+  Nothing in your dependency graph appears on the CISA Known Exploited
+  Vulnerabilities catalogue. On this evidence there is no Article 14
+  24-hour reporting trigger from a listed component today.</pre>
+
+  <p>Or the other answer:</p>
+
+<pre>  <span class="r">2 KEV MATCH(ES) - MANUAL DECISION REQUIRED NOW</span>
+
+  <span class="r">CVE-2021-44228</span>  <span class="d">(GHSA-jfh8-c2jp-5v3q)</span>
+    component      <span class="y">org.apache.logging.log4j:log4j-core 2.14.1</span>  [Maven]
+    known as       Apache Log4j2 Remote Code Execution Vulnerability
+    KEV listed     2021-12-10   ransomware use: Known
+
+  If you confirm exploitation in your product, the clock is:
+
+    Early warning     within 24h    <span class="y">2026-09-15 08:40:10 UTC</span>
+    Notification      within 72h    <span class="y">2026-09-17 08:40:10 UTC</span>
+    Final report      within 14d    <span class="y">2026-09-28 08:40:10 UTC</span></pre>
+
+  <p>Free, MIT licensed, standard library only, no account, no telemetry. 12 lockfile
+  formats plus CycloneDX and SPDX SBOMs. Exit codes designed to be a CI gate.</p>
+
+  <p><a class="cta" href="https://github.com/ntoledo319/cra-watch">Get cra-watch on GitHub →</a></p>
+
+  <p class="small" style="margin-top:14px">Run it on a schedule, not just on push. The KEV
+  catalogue gains entries continuously — a repo that was clean yesterday can be a reporting
+  question today without a line of your code changing.</p>
+
+  <hr>
+
+  <h2>Then: the part a scanner can't do</h2>
+
+  <p>The tool narrows a thousand CVEs to a shortlist. It cannot tell you whether to file —
+  because Article 14's actual test is whether the vulnerability is being exploited
+  <em>in your product</em>, and that's a human judgement about reachability, evidence, and
+  timing.</p>
+
+  <p>That judgement is where organisations come apart under a 24-hour clock. Who is
+  accountable for pressing send? What does an early warning say when you still know almost
+  nothing? What defends a decision <em>not</em> to report, eight months later, to a market
+  surveillance authority?</p>
+
+  <blockquote>The clock starts when you have a reasonable degree of certainty after an
+  initial assessment — not when a rumour arrives, and not when you finish the
+  investigation.</blockquote>
+
+  <p>The kit is the process around the decision: written in advance, so the 24 hours are
+  spent deciding rather than inventing a procedure.</p>
+
+  <div class="buy">
+    <div class="buy-h">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
+        <div>
+          <h3 style="margin:0 0 4px">CRA 24-Hour Reporting Kit</h3>
+          <div class="sub">Six documents. Instant download. Commercial licence.</div>
+        </div>
+        <div class="price">$149</div>
+      </div>
+    </div>
+    <div class="buy-b">
+      <ul class="tick">
+        <li><strong>Decision tree</strong> — does this trigger an Article 14 report? Actively exploited vs. high CVSS vs. public PoC. Third-party component reachability. What "becoming aware" actually means.</li>
+        <li><strong>The three clocks</strong> — 24h / 72h / 14d, with worked UTC arithmetic and the severe-incident variant (final report one month after notification).</li>
+        <li><strong>Three fill-in templates</strong> — early warning, 72-hour notification, final report. Every field labelled, with an annotated "what good looks like" example.</li>
+        <li><strong>Evidence log</strong> — the artefact that proves when you became aware and why you concluded as you did. This is what defends a decision not to report.</li>
+        <li><strong>Roles for the first 24 hours</strong> — accountable reporter, deputy, technical verifier, comms. No committee, no ambiguity at 3am.</li>
+        <li><strong>30-minute tabletop dry-run</strong> — an injected scenario and a facilitator script, so the first time you run the process isn't live.</li>
+      </ul>
+      <div id="pp-kit" class="pp"></div>
+      <p class="small" style="margin:12px 0 0">Secure checkout by PayPal — card or PayPal balance, no account required.
+      Download link appears here immediately after payment and is emailed to you.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Plainly:</strong> this is engineering and process tooling, not legal advice, and
+    Toledo Technologies is not a law firm. It will not make you CRA-compliant by itself and
+    doesn't claim to. It's the prepared process that turns a 24-hour scramble into a
+    procedure you already wrote down. Verify against Regulation (EU) 2024/2847 and your
+    coordinating national CSIRT's guidance before filing.
+  </div>
+
+  <hr>
+
+  <h2>What's actually in it</h2>
+
+  <table>
+    <tr><th>File</th><th>What it does</th></tr>
+    <tr><td class="mono">00-START-HERE</td><td>The first hour. A ten-line quick start for someone who just got the call.</td></tr>
+    <tr><td class="mono">01-DECISION-TREE</td><td>Report / don't report, as an ASCII tree and a numbered checklist.</td></tr>
+    <tr><td class="mono">02-TIMELINE-AND-CLOCKS</td><td>The cascade, worked in UTC, including what to file when you still know nothing.</td></tr>
+    <tr><td class="mono">03-REPORT-TEMPLATES</td><td>Early warning, 72-hour, final. Fill in the blanks.</td></tr>
+    <tr><td class="mono">04-EVIDENCE-LOG</td><td>Contemporaneous record template, with a filled example.</td></tr>
+    <tr><td class="mono">05-ROLES-AND-DRY-RUN</td><td>Who does what, plus a 30-minute tabletop you can run this week.</td></tr>
+  </table>
+
+  <p class="small">Delivered as Markdown (editable, diffable, drop it in your repo next to
+  your incident runbooks) plus a single combined PDF for people who want to print it and put
+  it on a wall.</p>
+
+  <hr>
+
+  <h2>Who this is for</h2>
+
+  <p>You manufacture a product with digital elements — software, hardware, a connected
+  device, a component sold separately — and it's available on the EU market. Directly, or
+  through an importer, distributor, or authorised representative. Being based outside the EU
+  doesn't remove the obligation.</p>
+
+  <p>You're probably a team of 5 to 200 without a dedicated regulatory function, where the
+  person who'd have to file is also the person shipping features. The kit exists so that
+  person has a procedure instead of an afternoon of reading a regulation.</p>
+
+  <h2>Who this isn't for</h2>
+
+  <p>If you have in-house regulatory counsel who've already drafted your Article 14
+  procedure, you don't need this. If you're looking for a compliance certificate, nothing
+  here is one, and anyone selling you one is selling you something that doesn't exist.</p>
+
+  <div id="thanks">
+    <h2>Payment received. Here's your kit.</h2>
+    <p id="thanks-detail" class="small"></p>
+    <a class="dl" id="dl-zip" href="/d/k7f3a9c2e8b14d6f/cra-24h-reporting-kit.zip">Download the kit (.zip)</a>
+    <a class="dl" id="dl-pdf" href="/d/k7f3a9c2e8b14d6f/cra-24h-reporting-kit.pdf" style="background:var(--ink)">Combined PDF</a>
+    <p class="small" style="margin-top:16px">A copy of these links has been emailed to you.
+    Bookmark this page — the links stay live. Questions:
+    <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a></p>
+  </div>
+
+  <hr>
+
+  <h2>Questions</h2>
+
+  <h3>Is the free tool actually free?</h3>
+  <p>Yes. MIT licensed, on GitHub, no account, no telemetry, no upsell inside the tool.
+  It's genuinely useful on its own and I'd rather it were widely used than gated.</p>
+
+  <h3>Does a KEV match mean I have to report?</h3>
+  <p>No, and the tool says so explicitly. KEV evidences exploitation <em>somewhere in the
+  world</em>. Article 14 asks about exploitation <em>in your product</em>. If the vulnerable
+  code path is unreachable in your build, the answer may be no. The kit's decision tree
+  walks that distinction, and the evidence log is how you record the reasoning.</p>
+
+  <h3>Is KEV the legal definition of "actively exploited"?</h3>
+  <p>No. It's a US government catalogue — it lags, and it isn't exhaustive. Your own
+  telemetry or a customer's incident report can start the clock before CISA lists anything.
+  KEV is a strong, free, public signal. It isn't the boundary of the obligation.</p>
+
+  <h3>Refunds?</h3>
+  <p>It's a digital download, so it's yours the moment you buy it. If it's not what you
+  expected, email within 14 days and you get your money back, no argument. Refunds go back
+  through PayPal to the original payment method.</p>
+
+  <h3>Will this be updated?</h3>
+  <p>The purchase is the current version, and you get any revision published in the 12
+  months after you buy at no extra cost — emailed to the address you paid from. To be
+  straight with you: that's a document-revision commitment, not a support contract or a
+  subscription. There's nothing to cancel.</p>
+
+  <h3>Who's behind it?</h3>
+  <p>Toledo Technologies LLC, a US software company. The tool and the kit were built
+  because the deadline is real and the gap between "here are your CVEs" and "file or don't
+  file, in 24 hours" is where teams actually get stuck.</p>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 7px"><strong>Toledo Technologies LLC</strong> · <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a></p>
+    <p style="margin:0 0 7px">Engineering and process tooling. Not legal advice. Not a law firm.
+    Not affiliated with, endorsed by, or connected to ENISA, the European Commission, or CISA.</p>
+    <p style="margin:0"><a href="https://github.com/ntoledo319/cra-watch">cra-watch on GitHub</a> · MIT licensed</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  if (params.get('paid') === '1') { showThanks(localStorage.getItem('cra_order') || ''); }
+
+  function showThanks(ref){
+    var t = document.getElementById('thanks');
+    t.style.display = 'block';
+    document.getElementById('thanks-detail').textContent =
+      ref ? ('Order reference ' + ref + ' — keep this for your records.') : '';
+    t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  function record(orderId){
+    // Delivery is client-side and immediate: the buyer never waits on a server.
+    // A poller on the seller side reconciles the order with PayPal and emails
+    // a receipt plus the same links, so the purchase survives a lost tab.
+    try { localStorage.setItem('cra_order', orderId); } catch(e){}
+  }
+
+  function mount(containerId, sku, amount, label){
+    if (!window.paypal) return;
+    window.paypal.Buttons({
+      style:{layout:'vertical', color:'black', shape:'rect', label:'pay', height:46},
+      createOrder: function(data, actions){
+        return actions.order.create({
+          intent:'CAPTURE',
+          purchase_units:[{
+            amount:{ value: amount, currency_code:'USD' },
+            description: label,
+            custom_id: sku
+          }],
+          application_context:{ shipping_preference:'NO_SHIPPING', user_action:'PAY_NOW', brand_name:'Toledo Technologies LLC' }
+        });
+      },
+      onApprove: function(data, actions){
+        return actions.order.capture().then(function(details){
+          record(data.orderID);
+          showThanks(data.orderID);
+        });
+      },
+      onError: function(err){
+        console.error(err);
+        alert('Payment could not be completed. Nothing was charged. Please try again, or email dev@toledotechnologies.com and I will invoice you directly.');
+      }
+    }).render('#' + containerId);
+  }
+
+  window.__mountCRA = function(){
+    mount('pp-kit', 'CRA-KIT-149', '149.00', 'CRA 24-Hour Reporting Kit');
+  };
+})();
+</script>
+<script src="https://www.paypal.com/sdk/js?client-id=AQkDu0GAw1T4p4lQrOcupkb_XVXwT8w2aLeu-YOtGDPjDognQiZBcTLBkxf21YodPDdIaICcP0b9nuCr&currency=USD&intent=capture&components=buttons&disable-funding=paylater,venmo"
+        onload="window.__mountCRA && window.__mountCRA()"></script>
+</body>
+</html>
