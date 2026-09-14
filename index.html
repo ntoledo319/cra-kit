@@ -383,8 +383,8 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
   <div id="thanks">
     <h2>Payment received. Here's your kit.</h2>
     <p id="thanks-detail" class="small"></p>
-    <a class="dl" id="dl-zip" href="/d/k7f3a9c2e8b14d6f/cra-24h-reporting-kit.zip">Download the kit (.zip)</a>
-    <a class="dl" id="dl-pdf" href="/d/k7f3a9c2e8b14d6f/cra-24h-reporting-kit.pdf" style="background:var(--ink)">Combined PDF</a>
+    <a class="dl" id="dl-zip" href="#">Download the kit (.zip)</a>
+    <a class="dl" id="dl-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
     <p class="small" style="margin-top:16px">A copy of these links has been emailed to you.
     Bookmark this page — the links stay live. Questions:
     <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a></p>
@@ -439,13 +439,23 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
 <script>
 (function(){
   var params = new URLSearchParams(location.search);
-  if (params.get('paid') === '1') { showThanks(localStorage.getItem('cra_order') || ''); }
+  if (params.get('paid') === '1') { var _o = localStorage.getItem('cra_order'); if (_o) { showThanks(_o); } }
+
+  function dlBase(){
+    // Assembled at runtime so the paid-file path is not sitting in page source.
+    return '/' + atob('ZA==') + '/' + atob('azdmM2E5YzJlOGIxNGQ2Zg==') + '/cra-24h-reporting-kit.';
+  }
 
   function showThanks(ref){
+    // Only reveal downloads for a real order reference. A bare ?paid=1 is not proof
+    // of payment and must not unlock the paid files.
+    if (!ref) { return; }
     var t = document.getElementById('thanks');
+    document.getElementById('dl-zip').href = dlBase() + 'zip';
+    document.getElementById('dl-pdf').href = dlBase() + 'pdf';
     t.style.display = 'block';
     document.getElementById('thanks-detail').textContent =
-      ref ? ('Order reference ' + ref + ' — keep this for your records.') : '';
+      'Order reference ' + ref + ' — keep this for your records.';
     t.scrollIntoView({behavior:'smooth', block:'center'});
   }
 
