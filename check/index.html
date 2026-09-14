@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free CRA Article 14 Checker — paste a lockfile, get an answer</title>
+<meta name="description" content="Paste your package-lock.json, requirements.txt, go.sum or SBOM. Find out in seconds whether anything you ship carries a known-exploited vulnerability under EU Cyber Resilience Act Article 14. Free, nothing uploaded to us.">
+<link rel="canonical" href="https://cra.toledotechnologies.com/check/">
+<style>
+:root{--ink:#0b0f14;--ink2:#1a212b;--paper:#fbfaf8;--line:#e3e0da;--accent:#8b1e1e;--accent2:#b8860b;--muted:#5c6673;--ok:#1e6b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.65 ui-serif,Georgia,"Times New Roman",serif}
+.wrap{max-width:820px;margin:0 auto;padding:0 24px}
+header{border-bottom:1px solid var(--line);background:#fff}
+.brand{display:flex;align-items:baseline;justify-content:space-between;padding:16px 0;gap:16px;flex-wrap:wrap}
+.brand a{color:var(--ink);text-decoration:none;font-weight:700;font-size:15px;letter-spacing:-.02em}
+.brand .co{color:var(--muted);font-size:13px}
+h1{font-size:clamp(27px,4.6vw,40px);line-height:1.15;letter-spacing:-.025em;margin:32px 0 14px}
+h2{font-size:21px;margin:38px 0 12px;letter-spacing:-.015em}
+p{margin:0 0 16px}
+.lead{font-size:18.5px;color:var(--ink2)}
+.small{font-size:13.8px;color:var(--muted);line-height:1.6}
+a{color:var(--accent);text-underline-offset:2.5px}
+textarea{width:100%;min-height:210px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.8px;
+  padding:14px;border:1px solid var(--line);border-radius:9px;background:#fff;resize:vertical;line-height:1.45}
+textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}
+button{background:var(--ink);color:#fff;border:0;padding:13px 26px;border-radius:8px;font-weight:600;
+  font-size:15.5px;cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif}
+button:hover{background:var(--ink2)}
+button:disabled{background:#9aa3ad;cursor:default}
+select{padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14.5px;font-family:inherit}
+#out{margin:26px 0}
+.card{border-radius:11px;padding:22px 24px;margin:18px 0}
+.clear{background:#f2f9f4;border:2px solid var(--ok)}
+.hit{background:#fdf3f3;border:2px solid var(--accent)}
+.neutral{background:#fff;border:1px solid var(--line)}
+.card h3{margin:0 0 9px;font-size:18.5px}
+.clear h3{color:var(--ok)}
+.hit h3{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+th,td{border:1px solid #cfcac2;padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#efece6;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-family:ui-sans-serif,system-ui,sans-serif}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.note{background:#fffdf5;border-left:3px solid var(--accent2);padding:13px 16px;margin:18px 0;font-size:14.5px}
+.cta{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:600;font-size:15px;font-family:ui-sans-serif,system-ui,sans-serif}
+footer{border-top:1px solid var(--line);margin-top:56px;padding:28px 0 48px;color:var(--muted);font-size:13.5px;background:#fff}
+code{background:#f2efe9;padding:2px 6px;border-radius:4px;font-size:.87em;font-family:ui-monospace,Menlo,Consolas,monospace}
+.bar{height:5px;background:#eee;border-radius:3px;overflow:hidden;margin:10px 0}
+.bar div{height:100%;background:var(--accent);width:0;transition:width .3s}
+ul{padding-left:20px}li{margin-bottom:7px}
+</style>
+</head>
+<body>
+<header><div class="wrap brand">
+  <a href="/">CRA&nbsp;24-Hour&nbsp;Reporting&nbsp;Kit</a>
+  <span class="co">Toledo Technologies LLC</span>
+</div></header>
+
+<div class="wrap">
+<h1>Is anything you ship being exploited right now?</h1>
+
+<p class="lead">Paste a dependency file. Get an answer in seconds. This is the question
+EU Cyber Resilience Act Article 14 actually asks — and it's a much smaller question than
+"how many CVEs do I have."</p>
+
+<p class="small"><strong>Nothing is uploaded to us.</strong> This page runs entirely in your
+browser. Your file contents never leave your machine — package names and versions are sent to
+the public OSV.dev API for lookup, and the CISA KEV comparison happens locally against a mirror
+served from this page. There is no account, no logging, and no server of ours involved.</p>
+
+<div class="row">
+  <select id="fmt">
+    <option value="auto">Detect format automatically</option>
+    <option value="npm">package-lock.json (npm)</option>
+    <option value="req">requirements.txt (pip)</option>
+    <option value="gosum">go.sum (Go)</option>
+    <option value="cargo">Cargo.lock (Rust)</option>
+    <option value="gemfile">Gemfile.lock (Ruby)</option>
+    <option value="composer">composer.lock (PHP)</option>
+    <option value="gradle">gradle.lockfile (Java/Maven)</option>
+    <option value="sbom">SBOM — CycloneDX or SPDX JSON</option>
+  </select>
+  <button id="go">Check for known-exploited components</button>
+</div>
+
+<textarea id="in" placeholder='Paste the contents of package-lock.json, requirements.txt, go.sum, Cargo.lock, Gemfile.lock, composer.lock, gradle.lockfile, or a CycloneDX/SPDX SBOM here...' spellcheck="false"></textarea>
+
+<div class="bar" id="bar" style="display:none"><div></div></div>
+<div id="out"></div>
+
+<h2>What this checks, precisely</h2>
+<p>Your declared dependencies are resolved against <a href="https://osv.dev">OSV.dev</a>, and every
+advisory found is mapped to its CVE aliases. Those CVEs are then intersected with the
+<a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">CISA Known Exploited
+Vulnerabilities catalogue</a> — the most widely used public register of vulnerabilities with
+confirmed real-world exploitation.</p>
+
+<p>Article 14 has applied since <strong>11 September 2026</strong>. It requires a manufacturer of a
+product with digital elements on the EU market to report an <strong>actively exploited</strong>
+vulnerability within <strong>24 hours</strong> of becoming aware, then a fuller notification at 72
+hours, then a final report within 14 days of a fix being available. Under Article 69(3) products
+already on the market before that date are in scope.</p>
+
+<div class="note">
+<strong>A hit here does not mean you must file.</strong> KEV evidences exploitation
+<em>somewhere in the world</em>. Article 14 asks about exploitation <em>in your product</em>. If the
+vulnerable code path isn't reachable in your build, the answer may be no. That's a human judgement —
+this tool finds the shortlist worth making it about. Equally, a clean result is not a certificate:
+your own telemetry or a customer report can start the clock before CISA lists anything.
+</div>
+
+<h2>Run it properly</h2>
+<p>This page is the convenient version. The real tool walks your whole repository, handles twelve
+lockfile formats, runs in CI, and exits non-zero on a match:</p>
+<p><a class="cta" href="https://github.com/ntoledo319/cra-watch">cra-watch on GitHub — free, MIT</a></p>
+<p class="small">Run it on a schedule, not just on push. The KEV catalogue gains entries
+continuously: a repository that was clean yesterday can become a reporting question today without a
+single line of your code changing.</p>
+
+<h2>And then the hard part</h2>
+<p>Finding the shortlist is the part software can do. Deciding under a 24-hour clock — who is
+accountable, what the early warning says when you still know almost nothing, what evidence defends a
+decision <em>not</em> to report — is a process problem.</p>
+<p><a href="/">The CRA 24-Hour Reporting Kit</a> covers that: decision tree, the three clocks worked
+in UTC, fill-in templates for all three filings, an evidence log, and a 30-minute tabletop exercise.</p>
+</div>
+
+<footer><div class="wrap">
+<p style="margin:0 0 7px"><strong>Toledo Technologies LLC</strong> · <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a></p>
+<p style="margin:0 0 7px">Engineering and process tooling. Not legal advice. Not a law firm. Not affiliated with, endorsed by, or connected to ENISA, the European Commission, or CISA.</p>
+<p style="margin:0"><a href="/">CRA 24-Hour Reporting Kit</a> · <a href="https://github.com/ntoledo319/cra-watch">cra-watch</a></p>
+</div></footer>
+
+<script>
+let KEV = null;
+
+async function kev(){
+  if (KEV) return KEV;
+  const r = await fetch('/kev-mirror.json');
+  KEV = await r.json();
+  return KEV;
+}
+
+function detect(t){
+  const s = t.trim();
+  if (s.startsWith('{')) {
+    try {
+      const j = JSON.parse(s);
+      if (j.bomFormat === 'CycloneDX' || j.spdxVersion || j.components || j.packages) return 'sbom';
+      if (j.lockfileVersion || j.dependencies || j.packages) return 'npm';
+    } catch(e){}
+    return 'sbom';
+  }
+  if (/^\s*\[\[package\]\]/m.test(s) && /name\s*=/.test(s)) return 'cargo';
+  if (/^GEM$|^\s{4}\S+ \([0-9]/m.test(s)) return 'gemfile';
+  if (/\sv[0-9][^\s]*\s+h1:/.test(s)) return 'gosum';
+  if (/^[\w.]+:[\w.-]+:[0-9]/m.test(s)) return 'gradle';
+  if (/^[A-Za-z0-9._-]+\s*==\s*[0-9]/m.test(s)) return 'req';
+  return 'req';
+}
+
+function parse(t, fmt){
+  const out = [];
+  const add = (e,n,v) => { if(n&&v) out.push([e,n,v]); };
+  if (fmt === 'npm') {
+    let j; try { j = JSON.parse(t); } catch(e){ return out; }
+    if (j.packages) for (const [p,m] of Object.entries(j.packages)) {
+      if (!p || !m || !m.version) continue;
+      add('npm', m.name || p.split('node_modules/').pop(), m.version);
+    }
+    const walk = d => { for (const [n,m] of Object.entries(d||{})) { if(m&&m.version){ add('npm',n,m.version); if(m.dependencies) walk(m.dependencies);} } };
+    if (j.dependencies && !j.packages) walk(j.dependencies);
+  } else if (fmt === 'req') {
+    t.split('\n').forEach(l => { const m = l.split('#')[0].trim().match(/^([A-Za-z0-9][\w.-]*)\s*==\s*([0-9][\w.!+-]*)/); if(m) add('PyPI',m[1],m[2]); });
+  } else if (fmt === 'gosum') {
+    const seen = new Set();
+    t.split('\n').forEach(l => { const p=l.split(/\s+/); if(p.length>=2&&p[1].startsWith('v')){ const v=p[1].replace('/go.mod',''); const k=p[0]+'@'+v; if(!seen.has(k)){seen.add(k); add('Go',p[0],v.replace(/^v/,''));} } });
+  } else if (fmt === 'cargo') {
+    let n=null; t.split('\n').forEach(l=>{ const s=l.trim();
+      if(s==='[[package]]') n=null;
+      else if(s.startsWith('name =')) n=s.split('=')[1].trim().replace(/"/g,'');
+      else if(s.startsWith('version =')&&n){ add('crates.io',n,s.split('=')[1].trim().replace(/"/g,'')); n=null; } });
+  } else if (fmt === 'gemfile') {
+    let ins=false; t.split('\n').forEach(l=>{ if(/^\s{0,4}(GEM|PATH|GIT)\s*$/.test(l)) ins=false; if(l.trim()==='specs:'){ins=true;return;}
+      if(ins){ const m=l.match(/^\s{4}([\w.-]+) \(([0-9][\w.]*)\)/); if(m) add('RubyGems',m[1],m[2]); } });
+  } else if (fmt === 'composer') {
+    let j; try{ j=JSON.parse(t); }catch(e){ return out; }
+    ['packages','packages-dev'].forEach(k => (j[k]||[]).forEach(p => add('Packagist', p.name, (p.version||'').replace(/^v/,''))));
+  } else if (fmt === 'gradle') {
+    t.split('\n').forEach(l=>{ const s=l.trim(); if(s.startsWith('#')||!s.includes('='))return;
+      const c=s.split('=')[0].split(':'); if(c.length===3) add('Maven', c[0]+':'+c[1], c[2]); });
+  } else if (fmt === 'sbom') {
+    let j; try{ j=JSON.parse(t); }catch(e){ return out; }
+    const em={npm:'npm',pypi:'PyPI',cargo:'crates.io',gem:'RubyGems',golang:'Go',maven:'Maven',composer:'Packagist',nuget:'NuGet'};
+    (j.components||[]).forEach(c=>{ const m=(c.purl||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]) add(em[m[1]], c.name, c.version); });
+    (j.packages||[]).forEach(p=>{ for(const r of (p.externalRefs||[])){ const m=(r.referenceLocator||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]){ add(em[m[1]], p.name, p.versionInfo); break; } } });
+  }
+  const seen = new Set();
+  return out.filter(([e,n,v]) => { const k=e+'|'+n+'|'+v; if(seen.has(k))return false; seen.add(k); return true; });
+}
+
+document.getElementById('go').onclick = async () => {
+  const btn = document.getElementById('go'), out = document.getElementById('out'), bar = document.getElementById('bar');
+  const text = document.getElementById('in').value;
+  if (!text.trim()) { out.innerHTML = '<div class="card neutral">Paste a dependency file first.</div>'; return; }
+
+  let fmt = document.getElementById('fmt').value;
+  if (fmt === 'auto') fmt = detect(text);
+  const comps = parse(text, fmt);
+
+  if (!comps.length) {
+    out.innerHTML = '<div class="card neutral"><h3>Nothing resolvable found</h3><p style="margin:0">I detected the format as <code>'+fmt+'</code> but couldn\'t pull pinned name/version pairs out of it. Try selecting the format explicitly, or use the CLI which handles more cases.</p></div>';
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Checking ' + comps.length + ' components...';
+  bar.style.display = 'block';
+  out.innerHTML = '';
+
+  try {
+    const K = await kev();
+    const queries = comps.map(([e,n,v]) => ({package:{name:n, ecosystem:e}, version:v}));
+    const hits = [];
+    const B = 400;
+    for (let i = 0; i < queries.length; i += B) {
+      bar.firstElementChild.style.width = Math.round(100*i/queries.length) + '%';
+      const r = await fetch('https://api.osv.dev/v1/querybatch', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({queries: queries.slice(i, i+B)})
+      });
+      const j = await r.json();
+      (j.results||[]).forEach((res, idx) => {
+        const c = comps[i+idx];
+        (res.vulns||[]).forEach(v => hits.push([c, v.id]));
+      });
+    }
+
+    // Resolve advisory ids to CVEs, then intersect with the KEV mirror.
+    const ids = [...new Set(hits.map(h => h[1]))];
+    const cveOf = {};
+    let done = 0;
+    await Promise.all(ids.map(async id => {
+      if (id.startsWith('CVE-')) { cveOf[id] = [id]; }
+      else {
+        try {
+          const r = await fetch('https://api.osv.dev/v1/vulns/' + id);
+          const j = await r.json();
+          cveOf[id] = (j.aliases||[]).filter(a => a.startsWith('CVE-'));
+        } catch(e) { cveOf[id] = []; }
+      }
+      done++; bar.firstElementChild.style.width = Math.round(100*done/Math.max(ids.length,1)) + '%';
+    }));
+
+    const findings = [];
+    const seen = new Set();
+    hits.forEach(([c, id]) => {
+      (cveOf[id]||[]).forEach(cve => {
+        if (K.cves[cve]) {
+          const k = c[1]+'|'+c[2]+'|'+cve;
+          if (!seen.has(k)) { seen.add(k); findings.push({comp:c, cve, meta:K.cves[cve], adv:id}); }
+        }
+      });
+    });
+
+    const withAdv = new Set(hits.map(h => h[0].join('|'))).size;
+    let html = '';
+
+    if (!findings.length) {
+      html += '<div class="card clear"><h3>No known-exploited components found</h3>'
+        + '<p>Checked <strong>'+comps.length+'</strong> components against KEV catalogue <strong>'+K.catalogVersion+'</strong> ('+K.count+' entries). None appear on the known-exploited list.</p>'
+        + '<p style="margin:0">On this evidence there is no Article 14 reporting trigger from a KEV-listed dependency today.</p></div>';
+      if (withAdv) html += '<div class="card neutral"><p style="margin:0"><strong>'+withAdv+'</strong> component(s) do carry published advisories that are <em>not</em> on the KEV list. That is ordinary patching work — not a reporting clock. Article 14 turns on active exploitation, not severity.</p></div>';
+    } else {
+      html += '<div class="card hit"><h3>'+findings.length+' known-exploited component'+(findings.length>1?'s':'')+' — decision required</h3>'
+        + '<p style="margin:0 0 4px">Checked '+comps.length+' components against KEV catalogue '+K.catalogVersion+'.</p></div>'
+        + '<table><tr><th>CVE</th><th>Component</th><th>KEV listed</th><th>Ransomware</th></tr>'
+        + findings.map(f => '<tr><td class="mono">'+f.cve+'</td><td class="mono">'+f.comp[1]+' '+f.comp[2]+'</td><td>'+f.meta[3]+'</td><td>'+(f.meta[4]?'Known':'—')+'</td></tr>').join('')
+        + '</table>';
+      const now = new Date();
+      const fmtD = d => d.toISOString().replace('T',' ').slice(0,19) + ' UTC';
+      html += '<div class="card neutral"><h3 style="font-size:16px">If you confirm exploitation in your product</h3>'
+        + '<table><tr><th>Stage</th><th>Window</th><th>Due (from now)</th></tr>'
+        + '<tr><td>Early warning</td><td>24 hours</td><td class="mono">'+fmtD(new Date(now.getTime()+864e5))+'</td></tr>'
+        + '<tr><td>Notification</td><td>72 hours</td><td class="mono">'+fmtD(new Date(now.getTime()+3*864e5))+'</td></tr>'
+        + '<tr><td>Final report</td><td>14 days</td><td class="mono">'+fmtD(new Date(now.getTime()+14*864e5))+'</td></tr></table>'
+        + '<p class="small" style="margin:0">The real clock runs from when you became aware, not from this scan. For a severe incident the final report is due one month after the incident notification.</p></div>';
+    }
+    out.innerHTML = html;
+  } catch (e) {
+    out.innerHTML = '<div class="card neutral"><h3>Check failed</h3><p style="margin:0">'+String(e).slice(0,200)+'</p><p class="small" style="margin:8px 0 0">The CLI works offline-ish and is more robust: <a href="https://github.com/ntoledo319/cra-watch">cra-watch</a></p></div>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Check for known-exploited components';
+    bar.style.display = 'none'; bar.firstElementChild.style.width = '0';
+  }
+};
+</script>
+</body>
+</html>
