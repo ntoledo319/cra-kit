@@ -240,6 +240,39 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
     </div>
   </div>
 
+  <div class="buy" style="border-color:#1e6b3a">
+    <div class="buy-h" style="background:#f4fbf6">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
+        <div>
+          <h3 style="margin:0 0 4px">Article 14 Exposure Assessment</h3>
+          <div class="sub">Your actual codebase, assessed and written up. Delivered same day.</div>
+        </div>
+        <div class="price">$1,200</div>
+      </div>
+    </div>
+    <div class="buy-b">
+      <p style="margin-bottom:14px">The kit tells you how to decide. This tells you where
+      <em>you</em> currently stand — a dated, reproducible, organisation-specific assessment of your
+      real dependency graph, written up as a document you can hand to a board, an auditor, or a
+      customer asking what you've done about the CRA.</p>
+      <ul class="tick">
+        <li><strong>We scan what you actually ship</strong> — your repositories or your SBOM (CycloneDX/SPDX). Up to 10 repos or SBOMs.</li>
+        <li><strong>A written assessment</strong>: components resolved, KEV intersection, ecosystem breakdown, and the specific determination you now owe on each finding</li>
+        <li><strong>Reproducible by you</strong> — the method is the open-source tool, so you can re-run it and get the same answer. No black box.</li>
+        <li><strong>Honest about its limits</strong>, in writing: what it did not examine, and why a clean result is not a certificate</li>
+        <li><strong>The full $149 kit included</strong></li>
+        <li><strong>A CI integration you keep</strong> — the scheduled scan that keeps the result true after the report is filed</li>
+      </ul>
+      <p class="small" style="margin-bottom:14px"><strong>How it works:</strong> pay below, then email
+      your repo URLs or attach your SBOM to <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a>
+      with your order reference. Public repos or an SBOM need no access from us at all. Delivered the
+      same day, usually within a few hours.</p>
+      <div id="pp-assess" class="pp"></div>
+      <p class="small" style="margin:12px 0 0"><strong>If we can't scan what you send, you get a full
+      refund</strong> — no argument, no partial delivery.</p>
+    </div>
+  </div>
+
   <div class="note">
     <strong>Plainly:</strong> this is engineering and process tooling, not legal advice, and
     Toledo Technologies is not a law firm. It will not make you CRA-compliant by itself and
@@ -392,6 +425,7 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
   window.__mountCRA = function(){
     mount('pp-kit', 'CRA-KIT-149', '149.00', 'CRA 24-Hour Reporting Kit');
     mount('pp-pack', 'CRA-PACK-490', '490.00', 'CRA 24-Hour Reporting Kit - Consultancy Licence');
+    mount('pp-assess', 'CRA-ASSESS-1200', '1200.00', 'CRA Article 14 Exposure Assessment');
   };
 })();
 </script>
