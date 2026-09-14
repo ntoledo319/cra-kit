@@ -296,6 +296,45 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
     </div>
   </div>
 
+  <hr>
+
+  <h2>Different deadline, same problem: AWS end-of-life</h2>
+
+  <p>Separate from the CRA, if you run anything on AWS there's a second clock: retired Lambda
+  runtimes, Amazon Linux 2, deprecated SDK versions. Same shape of problem — a real deadline, and
+  the hard part is knowing exactly which files are affected.</p>
+
+  <div class="buy" style="border-color:var(--muted)">
+    <div class="buy-h" style="background:#f7f6f3">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
+        <div>
+          <h3 style="margin:0 0 4px">AWS Deprecation Evidence Report</h3>
+          <div class="sub">Your repository, scanned to exact file and line. Same day.</div>
+        </div>
+        <div class="price">$299</div>
+      </div>
+    </div>
+    <div class="buy-b">
+      <ul class="tick">
+        <li><strong>Exact file/line evidence</strong> for every finding — not "you might have an issue", but <code>app/infra/template.yaml:5 — Runtime: python3.8</code></li>
+        <li><strong>Severity-and-reach ranked</strong> remediation order, so you fix the thing that matters first</li>
+        <li><strong>A configured rule or vendor reference</strong> for each finding, linking to AWS's own documentation</li>
+        <li><strong>Hash-anchored</strong> — input SHA-256 and an evidence fingerprint printed in the report, so it's verifiable and reproducible</li>
+        <li>Covers retired Lambda runtimes, Amazon Linux 2, deprecated SDKs and IaC patterns</li>
+      </ul>
+      <p class="small" style="margin-bottom:14px"><strong>How it works:</strong> pay below, then email
+      a repository ZIP (or a public repo URL) to
+      <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a> with your order
+      reference. Delivered the same day, usually within a few hours.</p>
+      <div id="pp-eol" class="pp"></div>
+      <p class="small" style="margin:12px 0 0"><strong>Honest limitation, stated in the report
+      itself:</strong> this is a static scan of what you upload. It does not query a live AWS
+      account, execute code, prove exploitability, or guarantee a complete resource inventory.
+      Validate every change in a non-production environment. If we can't scan what you send, full
+      refund.</p>
+    </div>
+  </div>
+
   <div class="note">
     <strong>Plainly:</strong> this is engineering and process tooling, not legal advice, and
     Toledo Technologies is not a law firm. It will not make you CRA-compliant by itself and
@@ -449,6 +488,7 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
     mount('pp-kit', 'CRA-KIT-149', '149.00', 'CRA 24-Hour Reporting Kit');
     mount('pp-pack', 'CRA-PACK-490', '490.00', 'CRA 24-Hour Reporting Kit - Consultancy Licence');
     mount('pp-assess', 'CRA-ASSESS-1200', '1200.00', 'CRA Article 14 Exposure Assessment');
+    mount('pp-eol', 'EOL-AUDIT-299', '299.00', 'AWS Deprecation Evidence Report');
   };
 })();
 </script>
