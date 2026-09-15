@@ -243,4 +243,16 @@ Not affiliated with, endorsed by, or connected to the European Commission.</p>
   if (window.paypal) { mountAll(); } else { window.addEventListener('load', mountAll); }
 })();
 </script>
+<script>
+/* First-party hit counter. No cookies, no third-party script, no IP stored.
+   Fails silently: it must never affect the page it measures. */
+(function(){try{
+  var i=new Image(1,1);
+  i.referrerPolicy='no-referrer-when-downgrade';
+  i.src='https://px.toledotechnologies.com/p.gif?s='+encodeURIComponent(location.hostname)
+      +'&u='+encodeURIComponent(location.pathname)
+      +'&r='+encodeURIComponent(document.referrer||'')
+      +'&_='+Date.now();
+}catch(e){}})();
+</script>
 </body></html>
