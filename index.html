@@ -504,5 +504,17 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AQkDu0GAw1T4p4lQrOcupkb_XVXwT8w2aLeu-YOtGDPjDognQiZBcTLBkxf21YodPDdIaICcP0b9nuCr&currency=USD&intent=capture&components=buttons&disable-funding=paylater,venmo"
         onload="window.__mountCRA && window.__mountCRA()"></script>
+<script>
+/* First-party hit counter. No cookies, no third-party script, no IP stored.
+   Fails silently: it must never affect the page it measures. */
+(function(){try{
+  var i=new Image(1,1);
+  i.referrerPolicy='no-referrer-when-downgrade';
+  i.src='https://px.toledotechnologies.com/p.gif?s='+encodeURIComponent(location.hostname)
+      +'&u='+encodeURIComponent(location.pathname)
+      +'&r='+encodeURIComponent(document.referrer||'')
+      +'&_='+Date.now();
+}catch(e){}})();
+</script>
 </body>
 </html>
