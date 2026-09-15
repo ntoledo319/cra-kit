@@ -212,6 +212,27 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
   spent deciding rather than inventing a procedure.</p>
 
   <div class="buy">
+  <div class="buy-h">
+    <div class="price">$29</div>
+    <div><strong>Vulnerability Handling Starter Pack</strong></div>
+    <div class="small">The files and habits a team needs <em>before</em> either regulation is a
+    question. RFC&nbsp;9116 <code>security.txt</code>, a disclosure policy, an intake and triage
+    runbook, the advisory and CVE process, and the five files that belong in every repo.
+    10,000&nbsp;words across six documents + a 37-page PDF.</div>
+    <div class="small" style="margin-top:8px">Useful with no EU exposure at all. It is the
+    groundwork, not the regulation &mdash; and it says plainly when you need one of the kits
+    below instead.</div>
+  </div>
+  <div class="buy-b"><div id="pp-sp"></div></div>
+</div>
+
+<div id="thanks-sp" style="display:none;border:2px solid var(--ok);border-radius:12px;padding:28px;background:#f4fbf6;margin:26px 0">
+  <h2 style="margin-top:0">Payment received. Here's your pack.</h2>
+  <p id="thanks-sp-detail" class="small"></p>
+  <a class="dl" id="dl-sp-zip" href="#">Download the pack (.zip)</a>
+  <a class="dl" id="dl-sp-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
+</div>
+<div class="buy">
     <div class="buy-h">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
         <div>
@@ -525,6 +546,50 @@ end-of-life in your project.</p>
       +'&r='+encodeURIComponent(document.referrer||'')
       +'&_='+Date.now();
 }catch(e){}})();
+</script>
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  var _o = localStorage.getItem('sp_order');
+  if (params.get('paid') === 'sp' && _o) { showSp(_o); }
+
+  function spBase(){
+    return '/' + atob('ZA==') + '/' + atob('czR2N24ycTh3MXg1ejNjNg==') + '/vuln-handling-starter-pack.';
+  }
+  function showSp(ref){
+    if (!ref) { return; }
+    var t = document.getElementById('thanks-sp');
+    document.getElementById('dl-sp-zip').href = spBase() + 'zip';
+    document.getElementById('dl-sp-pdf').href = spBase() + 'pdf';
+    t.style.display = 'block';
+    document.getElementById('thanks-sp-detail').textContent =
+      'Order reference ' + ref + ' \u2014 keep this for your records.';
+    t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function mountSp(){
+    if (!window.paypal) return;
+    window.paypal.Buttons({
+      style:{layout:'vertical', color:'black', shape:'rect', label:'pay', height:46},
+      createOrder: function(data, actions){
+        return actions.order.create({
+          intent:'CAPTURE',
+          purchase_units:[{ amount:{ value:'29.00', currency_code:'USD' },
+            description:'Vulnerability Handling Starter Pack', custom_id:'SP-KIT-29' }],
+          application_context:{ shipping_preference:'NO_SHIPPING', user_action:'PAY_NOW', brand_name:'Toledo Technologies LLC' }
+        });
+      },
+      onApprove: function(data, actions){
+        return actions.order.capture().then(function(){
+          try { localStorage.setItem('sp_order', data.orderID); } catch(e){}
+          showSp(data.orderID);
+        });
+      },
+      onError: function(err){ console.error(err);
+        alert('Payment could not be completed. Nothing was charged. Please try again, or email dev@toledotechnologies.com and I will invoice you directly.'); }
+    }).render('#pp-sp');
+  }
+  if (window.paypal) { mountSp(); } else { window.addEventListener('load', mountSp); }
+})();
 </script>
 </body>
 </html>
