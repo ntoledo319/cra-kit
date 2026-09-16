@@ -301,7 +301,7 @@ Different questions, different answers &mdash; free tools for both
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
         <div>
           <h3 style="margin:0 0 4px">Article 14 Exposure Assessment</h3>
-          <div class="sub">Your actual codebase, assessed and written up. Delivered same day.</div>
+          <div class="sub">Your actual codebase, assessed and written up.</div>
         </div>
         <div class="price">$1,200</div>
       </div>
@@ -319,13 +319,13 @@ Different questions, different answers &mdash; free tools for both
         <li><strong>The full $149 kit included</strong></li>
         <li><strong>A CI integration you keep</strong> — the scheduled scan that keeps the result true after the report is filed</li>
       </ul>
-      <p class="small" style="margin-bottom:14px"><strong>How it works:</strong> pay below, then email
-      your repo URLs or attach your SBOM to <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a>
-      with your order reference. Public repos or an SBOM need no access from us at all. Delivered the
-      same day, usually within a few hours.</p>
+      <p class="small" style="margin-bottom:14px"><strong>Not currently available.</strong>
+      This one needs work done after you pay, and we will not take money for something whose delivery
+      depends on capacity we cannot guarantee. Everything the assessment is built on is public: the
+      method is <a href="https://github.com/ntoledo319/cra-watch">cra-watch</a>, which is MIT-licensed
+      and runs on your own machine, and the decision procedure is the $149 kit above. You can produce
+      the same result yourself, today, for free.</p>
       <div id="pp-assess" class="pp"></div>
-      <p class="small" style="margin:12px 0 0"><strong>If we can't scan what you send, you get a full
-      refund</strong> — no argument, no partial delivery.</p>
     </div>
   </div>
 
@@ -342,7 +342,7 @@ Different questions, different answers &mdash; free tools for both
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
         <div>
           <h3 style="margin:0 0 4px">AWS Deprecation Evidence Report</h3>
-          <div class="sub">Your repository, scanned to exact file and line. Same day.</div>
+          <div class="sub">Your repository, scanned to exact file and line. Automated, self-serve.</div>
         </div>
         <div class="price">$299</div>
       </div>
@@ -355,10 +355,12 @@ Different questions, different answers &mdash; free tools for both
         <li><strong>Hash-anchored</strong> — input SHA-256 and an evidence fingerprint printed in the report, so it's verifiable and reproducible</li>
         <li>Covers retired Lambda runtimes, Amazon Linux 2, deprecated SDKs and IaC patterns</li>
       </ul>
-      <p class="small" style="margin-bottom:14px"><strong>How it works:</strong> pay below, then email
-      a repository ZIP (or a public repo URL) to
-      <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a> with your order
-      reference. Delivered the same day, usually within a few hours.</p>
+      <p class="small" style="margin-bottom:14px"><strong>How it works:</strong> this report is now
+      fully self-serve at <a href="https://eolkits.com/audit/">eolkits.com/audit</a> — upload a
+      repository ZIP, pay, and the report is generated and delivered automatically. No email step and
+      nothing waiting on a human.</p>
+      <p style="margin-bottom:14px"><a class="btn" href="https://eolkits.com/audit/">Go to
+      eolkits.com/audit &rarr;</a></p>
       <div id="pp-eol" class="pp"></div>
       <p class="small" style="margin:12px 0 0"><strong>Honest limitation, stated in the report
       itself:</strong> this is a static scan of what you upload. It does not query a live AWS
@@ -540,8 +542,11 @@ end-of-life in your project.</p>
   window.__mountCRA = function(){
     mount('pp-kit', 'CRA-KIT-149', '149.00', 'CRA 24-Hour Reporting Kit');
     mount('pp-pack', 'CRA-PACK-490', '490.00', 'CRA 24-Hour Reporting Kit - Consultancy Licence');
-    mount('pp-assess', 'CRA-ASSESS-1200', '1200.00', 'CRA Article 14 Exposure Assessment');
-    mount('pp-eol', 'EOL-AUDIT-299', '299.00', 'AWS Deprecation Evidence Report');
+    // CRA-ASSESS-1200 and EOL-AUDIT-299 are deliberately NOT mounted.
+    // Both required work performed after payment. We do not sell anything whose
+    // fulfilment depends on future labour, because a promise we cannot keep is
+    // worse than a sale we do not make. The AWS report is now self-serve and
+    // fully automated at eolkits.com; the Article 14 assessment is withdrawn.
   };
 })();
 </script>
