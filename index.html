@@ -264,7 +264,8 @@ Different questions, different answers &mdash; free tools for both
       </ul>
       <div id="pp-kit" class="pp"></div>
       <p class="small" style="margin:12px 0 0">Secure checkout by PayPal — card or PayPal balance, no account required.
-      Download link appears here immediately after payment and is emailed to you.</p>
+      After payment this page shows your order reference and a prefilled message that claims your
+      files; they are sent by a person in reply to it.</p>
     </div>
   </div>
 
@@ -478,8 +479,8 @@ end-of-life in your project.</p>
 </footer>
 
 <script>
-/* Claim helper. The paid files are not reachable from any public URL; the order
-   reference below is what releases them. Kept deliberately free of any file path:
+/* Claim helper. The paid files are not served from this site; the order reference
+   below is what claims them, by email. Kept deliberately free of any file path:
    anything this page knows, the whole internet knows. */
 window.claimHref = function(product, ref){
   var subject = 'Kit delivery \u2014 ' + product + ' \u2014 order ' + (ref || '');
