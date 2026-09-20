@@ -241,8 +241,7 @@ Different questions, different answers &mdash; free tools for both
 <div id="thanks-sp" style="display:none;border:2px solid var(--ok);border-radius:12px;padding:28px;background:#f4fbf6;margin:26px 0">
   <h2 style="margin-top:0">Payment received. Here's your pack.</h2>
   <p id="thanks-sp-detail" class="small"></p>
-  <a class="dl" id="dl-sp-zip" href="#">Download the pack (.zip)</a>
-  <a class="dl" id="dl-sp-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
+  <a class="dl" id="dl-sp-claim" href="mailto:dev@toledotechnologies.com">Email me my files</a>
 </div>
 <div class="buy">
     <div class="buy-h">
@@ -428,11 +427,8 @@ end-of-life in your project.</p>
 <div id="thanks">
     <h2>Payment received. Here's your kit.</h2>
     <p id="thanks-detail" class="small"></p>
-    <a class="dl" id="dl-zip" href="#">Download the kit (.zip)</a>
-    <a class="dl" id="dl-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
-    <p class="small" style="margin-top:16px">A copy of these links has been emailed to you.
-    Bookmark this page — the links stay live. Questions:
-    <a href="mailto:dev@toledotechnologies.com">dev@toledotechnologies.com</a></p>
+    <a class="dl" id="dl-claim" href="mailto:dev@toledotechnologies.com">Email me my files</a>
+    <p class="small" style="margin-top:16px">Keep your order reference. It is what releases your files &mdash; they are not served from a public link.</p>
   </div>
 
   <hr>
@@ -482,22 +478,29 @@ end-of-life in your project.</p>
 </footer>
 
 <script>
+/* Claim helper. The paid files are not reachable from any public URL; the order
+   reference below is what releases them. Kept deliberately free of any file path:
+   anything this page knows, the whole internet knows. */
+window.claimHref = function(product, ref){
+  var subject = 'Kit delivery \u2014 ' + product + ' \u2014 order ' + (ref || '');
+  var body = 'My PayPal order reference is ' + (ref || '') + '.\n\n'
+           + 'Please send the files for: ' + product + '\n';
+  return 'mailto:dev@toledotechnologies.com'
+       + '?subject=' + encodeURIComponent(subject)
+       + '&body=' + encodeURIComponent(body);
+};
+</script>
+<script>
 (function(){
   var params = new URLSearchParams(location.search);
   if (params.get('paid') === '1') { var _o = localStorage.getItem('cra_order'); if (_o) { showThanks(_o); } }
-
-  function dlBase(){
-    // Assembled at runtime so the paid-file path is not sitting in page source.
-    return '/' + atob('ZA==') + '/' + atob('OWJkOTAyNTA3YjA3YzI4MA==') + '/cra-24h-reporting-kit.';
-  }
 
   function showThanks(ref){
     // Only reveal downloads for a real order reference. A bare ?paid=1 is not proof
     // of payment and must not unlock the paid files.
     if (!ref) { return; }
     var t = document.getElementById('thanks');
-    document.getElementById('dl-zip').href = dlBase() + 'zip';
-    document.getElementById('dl-pdf').href = dlBase() + 'pdf';
+    document.getElementById('dl-claim').href = window.claimHref('CRA 24-Hour Reporting Kit', ref);
     t.style.display = 'block';
     document.getElementById('thanks-detail').textContent =
       'Order reference ' + ref + ' — keep this for your records.';
@@ -505,9 +508,7 @@ end-of-life in your project.</p>
   }
 
   function record(orderId){
-    // Delivery is client-side and immediate: the buyer never waits on a server.
-    // A poller on the seller side reconciles the order with PayPal and emails
-    // a receipt plus the same links, so the purchase survives a lost tab.
+    // The order reference is the buyer's receipt and their claim on the files.
     try { localStorage.setItem('cra_order', orderId); } catch(e){}
   }
 
@@ -569,15 +570,10 @@ end-of-life in your project.</p>
   var params = new URLSearchParams(location.search);
   var _o = localStorage.getItem('sp_order');
   if (params.get('paid') === 'sp' && _o) { showSp(_o); }
-
-  function spBase(){
-    return '/' + atob('ZA==') + '/' + atob('YTQyZmUxOWM4OGI2MDI0YQ==') + '/vuln-handling-starter-pack.';
-  }
   function showSp(ref){
     if (!ref) { return; }
     var t = document.getElementById('thanks-sp');
-    document.getElementById('dl-sp-zip').href = spBase() + 'zip';
-    document.getElementById('dl-sp-pdf').href = spBase() + 'pdf';
+    document.getElementById('dl-sp-claim').href = window.claimHref('Vulnerability Handling Starter Pack', ref);
     t.style.display = 'block';
     document.getElementById('thanks-sp-detail').textContent =
       'Order reference ' + ref + ' \u2014 keep this for your records.';

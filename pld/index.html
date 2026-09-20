@@ -159,8 +159,7 @@ MIT, no dependencies, genuinely free. It is <em>one input</em> to the evidence p
 <div id="thanks-sp" style="display:none;border:2px solid var(--ok);border-radius:12px;padding:28px;background:#f4fbf6;margin:26px 0">
   <h2 style="margin-top:0">Payment received. Here's your pack.</h2>
   <p id="thanks-sp-detail" class="small"></p>
-  <a class="dl" id="dl-sp-zip" href="#">Download the pack (.zip)</a>
-  <a class="dl" id="dl-sp-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
+  <a class="dl" id="dl-sp-claim" href="mailto:dev@toledotechnologies.com">Email me my files</a>
 </div>
 <div class="buy">
   <div class="buy-h">
@@ -183,8 +182,7 @@ MIT, no dependencies, genuinely free. It is <em>one input</em> to the evidence p
 <div id="thanks">
   <h2>Payment received. Here's your kit.</h2>
   <p id="thanks-detail" class="small"></p>
-  <a class="dl" id="dl-zip" href="#">Download the kit (.zip)</a>
-  <a class="dl" id="dl-pdf" href="#" style="background:var(--ink)">Combined PDF</a>
+  <a class="dl" id="dl-claim" href="mailto:dev@toledotechnologies.com">Email me my files</a>
   <p class="small" style="margin-top:16px">Bookmark this page. A copy of these links is emailed to
   the address you paid from.</p>
 </div>
@@ -207,20 +205,28 @@ Not affiliated with, endorsed by, or connected to the European Commission.</p>
 <script src="https://www.paypal.com/sdk/js?client-id=AQkDu0GAw1T4p4lQrOcupkb_XVXwT8w2aLeu-YOtGDPjDognQiZBcTLBkxf21YodPDdIaICcP0b9nuCr&currency=USD&intent=capture&components=buttons&disable-funding=paylater,venmo"
         onload="window.__mountCRA && window.__mountCRA()"></script>
 <script>
+/* Claim helper. The paid files are not reachable from any public URL; the order
+   reference below is what releases them. Kept deliberately free of any file path:
+   anything this page knows, the whole internet knows. */
+window.claimHref = function(product, ref){
+  var subject = 'Kit delivery \u2014 ' + product + ' \u2014 order ' + (ref || '');
+  var body = 'My PayPal order reference is ' + (ref || '') + '.\n\n'
+           + 'Please send the files for: ' + product + '\n';
+  return 'mailto:dev@toledotechnologies.com'
+       + '?subject=' + encodeURIComponent(subject)
+       + '&body=' + encodeURIComponent(body);
+};
+</script>
+<script>
 (function(){
   var params = new URLSearchParams(location.search);
   var _o = localStorage.getItem('pld_order');
   if (params.get('paid') === '1' && _o) { showThanks(_o); }
 
-  function dlBase(){
-    return '/' + atob('ZA==') + '/' + atob('NmVhOGYxNmQ1ZWQxMjgwMg==') + '/eu-pld-kit.';
-  }
-
   function showThanks(ref){
     if (!ref) { return; }
     var t = document.getElementById('thanks');
-    document.getElementById('dl-zip').href = dlBase() + 'zip';
-    document.getElementById('dl-pdf').href = dlBase() + 'pdf';
+    document.getElementById('dl-claim').href = window.claimHref('EU Product Liability Directive Kit', ref);
     t.style.display = 'block';
     document.getElementById('thanks-detail').textContent =
       'Order reference ' + ref + ' — keep this for your records.';
@@ -281,15 +287,10 @@ Not affiliated with, endorsed by, or connected to the European Commission.</p>
   var params = new URLSearchParams(location.search);
   var _o = localStorage.getItem('sp_order');
   if (params.get('paid') === 'sp' && _o) { showSp(_o); }
-
-  function spBase(){
-    return '/' + atob('ZA==') + '/' + atob('YTQyZmUxOWM4OGI2MDI0YQ==') + '/vuln-handling-starter-pack.';
-  }
   function showSp(ref){
     if (!ref) { return; }
     var t = document.getElementById('thanks-sp');
-    document.getElementById('dl-sp-zip').href = spBase() + 'zip';
-    document.getElementById('dl-sp-pdf').href = spBase() + 'pdf';
+    document.getElementById('dl-sp-claim').href = window.claimHref('Vulnerability Handling Starter Pack', ref);
     t.style.display = 'block';
     document.getElementById('thanks-sp-detail').textContent =
       'Order reference ' + ref + ' \u2014 keep this for your records.';

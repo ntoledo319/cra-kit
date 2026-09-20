@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /d/
 Sitemap: https://cra.toledotechnologies.com/sitemap.xml
