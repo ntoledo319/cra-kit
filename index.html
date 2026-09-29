@@ -88,15 +88,35 @@ th{font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05e
 @media(max-width:560px){.clock{grid-template-columns:1fr}.buy-h,.buy-b{padding-left:19px;padding-right:19px}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Product",
- "name":"CRA 24-Hour Reporting Kit",
- "description":"Decision tree, timelines, report templates, evidence log and tabletop exercise for EU Cyber Resilience Act Article 14 reporting obligations (24h/72h/14d), in force since 11 September 2026.",
- "brand":{"@type":"Organization","name":"Toledo Technologies LLC"},
- "url":"https://cra.toledotechnologies.com/",
- "offers":[
-  {"@type":"Offer","name":"Single organisation licence","price":"149.00","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://cra.toledotechnologies.com/"},
-  {"@type":"Offer","name":"Consultancy / multi-entity licence","price":"490.00","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://cra.toledotechnologies.com/"},
-  {"@type":"Offer","name":"Article 14 Exposure Assessment","price":"1200.00","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://cra.toledotechnologies.com/"}]}
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "CRA 24-Hour Reporting Kit",
+  "description": "Decision tree, timelines, report templates, evidence log and tabletop exercise for EU Cyber Resilience Act Article 14 reporting obligations (24h/72h/14d), in force since 11 September 2026.",
+  "brand": {
+    "@type": "Organization",
+    "name": "Toledo Technologies LLC"
+  },
+  "url": "https://cra.toledotechnologies.com/",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Single organisation licence",
+      "price": "149.00",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "https://cra.toledotechnologies.com/"
+    },
+    {
+      "@type": "Offer",
+      "name": "Consultancy / multi-entity licence",
+      "price": "490.00",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "https://cra.toledotechnologies.com/"
+    }
+  ]
+}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -173,9 +193,9 @@ Different questions, different answers &mdash; free tools for both
 
   <span class="g">NO KEV MATCHES.</span>
 
-  Nothing in your dependency graph appears on the CISA Known Exploited
-  Vulnerabilities catalogue. On this evidence there is no Article 14
-  24-hour reporting trigger from a listed component today.</pre>
+  No KEV matches were found in this example. This is not a determination
+  that Article 14 reporting is unnecessary. Other evidence of exploitation
+  or a severe incident may require reporting.</pre>
 
   <p>Or the other answer:</p>
 
@@ -186,11 +206,15 @@ Different questions, different answers &mdash; free tools for both
     known as       Apache Log4j2 Remote Code Execution Vulnerability
     KEV listed     2021-12-10   ransomware use: Known
 
-  If you confirm exploitation in your product, the clock is:
+  Illustrative example: awareness recorded at 2026-09-14 08:40:10 UTC.
+  For an actively exploited vulnerability affecting an in-scope product:
 
     Early warning     within 24h    <span class="y">2026-09-15 08:40:10 UTC</span>
     Notification      within 72h    <span class="y">2026-09-17 08:40:10 UTC</span>
-    Final report      within 14d    <span class="y">2026-09-28 08:40:10 UTC</span></pre>
+    Final report      within 14 days after a corrective measure is available.
+                      No final-report date is inferred from awareness alone.</pre>
+
+  <p class="small">For severe incidents, the final report is due within one month of the 72-hour notification. Check the <a href="https://digital-strategy.ec.europa.eu/en/policies/cra-reporting">European Commission reporting guidance</a> and your applicable reporting obligations. These examples are educational, not legal advice.</p>
 
   <p>Free, MIT licensed, standard library only, no account, no telemetry. 12 lockfile
   formats plus CycloneDX and SPDX SBOMs. Exit codes designed to be a CI gate.</p>
@@ -205,6 +229,7 @@ Different questions, different answers &mdash; free tools for both
   <hr>
 
   <h2>Then: the part a scanner can't do</h2>
+  <p><a href="/samples/cra-evidence-sample.html">Read a synthetic evidence-log sample</a> before buying. It shows the format, not a real customer incident.</p>
 
   <p>The tool narrows a thousand CVEs to a shortlist. It cannot tell you whether to file —
   because Article 14's actual test is whether the vulnerability is being exploited
@@ -248,7 +273,7 @@ Different questions, different answers &mdash; free tools for both
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap">
         <div>
           <h3 style="margin:0 0 4px">CRA 24-Hour Reporting Kit</h3>
-          <div class="sub">Six documents. Instant download. Commercial licence.</div>
+          <div class="sub">Six documents. Manual email delivery. Commercial licence.</div>
         </div>
         <div class="price">$149</div>
       </div>
@@ -287,12 +312,12 @@ Different questions, different answers &mdash; free tools for both
         <li>Everything in the $149 kit, identical files</li>
         <li>Use it with an <strong>unlimited number of client organisations</strong> or entities you control</li>
         <li>Rebrand and adapt the templates inside client deliverables</li>
-        <li>Same 12-month revision access, same instant download</li>
+        <li>Same 12-month revision access, same manual email delivery</li>
       </ul>
       <p class="small" style="margin-bottom:14px">You still may not resell the pack itself as a product
       or publish it publicly. It's a licence to <em>use</em> it in your work, not to republish it.</p>
       <div id="pp-pack" class="pp"></div>
-      <p class="small" style="margin:12px 0 0">Same instant download. Same 14-day refund.</p>
+      <p class="small" style="margin:12px 0 0">Manual email delivery after payment verification. Same 14-day refund.</p>
     </div>
   </div>
 
@@ -452,7 +477,7 @@ end-of-life in your project.</p>
   KEV is a strong, free, public signal. It isn't the boundary of the obligation.</p>
 
   <h3>Refunds?</h3>
-  <p>It's a digital download, so it's yours the moment you buy it. If it's not what you
+  <p>The files are delivered manually by email after payment verification. If it's not what you
   expected, email within 14 days and you get your money back, no argument. Refunds go back
   through PayPal to the original payment method.</p>
 

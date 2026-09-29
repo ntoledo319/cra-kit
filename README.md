@@ -53,3 +53,7 @@ Commission or CISA. No clients, results or testimonials — there are none.
 
 The pages are plain HTML with no build step; GitHub Pages serves `main` as-is, so a push
 to `main` is a deploy. There is no other checkout of record.
+
+## September28 public-copy revision
+
+The reviewed correction removes obsolete instant/automatic-download and withdrawn-service claims, fixes illustrative reporting-clock wording, and links a synthetic evidence-log sample under `samples/`. This public repository still contains no paid kit files, private workspace implementation, mailer or automated entitlement service. The corrected copy does not advertise automated fulfilment. Private product development/recovery does not change the public delivery contract.
