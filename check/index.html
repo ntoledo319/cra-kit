@@ -136,6 +136,10 @@ in UTC, fill-in templates for all three filings, an evidence log, and a 30-minut
 
 <script>
 let KEV = null;
+// Treat file contents and remote advisory metadata as text, never markup.
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
 
 async function kev(){
   if (KEV) return KEV;
@@ -149,8 +153,10 @@ function detect(t){
   if (s.startsWith('{')) {
     try {
       const j = JSON.parse(s);
-      if (j.bomFormat === 'CycloneDX' || j.spdxVersion || j.components || j.packages) return 'sbom';
-      if (j.lockfileVersion || j.dependencies || j.packages) return 'npm';
+      if (j && typeof j === 'object') {
+        if (j.bomFormat === 'CycloneDX' || j.spdxVersion || Array.isArray(j.components) || Array.isArray(j.packages)) return 'sbom';
+        if (j.lockfileVersion || j.dependencies || j.packages) return 'npm';
+      }
     } catch(e){}
     return 'sbom';
   }
@@ -164,7 +170,7 @@ function detect(t){
 
 function parse(t, fmt){
   const out = [];
-  const add = (e,n,v) => { if(n&&v) out.push([e,n,v]); };
+  const add = (e,n,v) => { if(typeof n === 'string' && n && typeof v === 'string' && v) out.push([e,n,v]); };
   if (fmt === 'npm') {
     let j; try { j = JSON.parse(t); } catch(e){ return out; }
     if (j.packages) for (const [p,m] of Object.entries(j.packages)) {
@@ -195,8 +201,8 @@ function parse(t, fmt){
   } else if (fmt === 'sbom') {
     let j; try{ j=JSON.parse(t); }catch(e){ return out; }
     const em={npm:'npm',pypi:'PyPI',cargo:'crates.io',gem:'RubyGems',golang:'Go',maven:'Maven',composer:'Packagist',nuget:'NuGet'};
-    (j.components||[]).forEach(c=>{ const m=(c.purl||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]) add(em[m[1]], c.name, c.version); });
-    (j.packages||[]).forEach(p=>{ for(const r of (p.externalRefs||[])){ const m=(r.referenceLocator||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]){ add(em[m[1]], p.name, p.versionInfo); break; } } });
+    (Array.isArray(j?.components) ? j.components : []).forEach(c=>{ const m=String(c?.purl||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]) add(em[m[1]], c.name, c.version); });
+    (Array.isArray(j?.packages) ? j.packages : []).forEach(p=>{ for(const r of (Array.isArray(p?.externalRefs) ? p.externalRefs : [])){ const m=String(r?.referenceLocator||'').match(/^pkg:([a-z]+)\//); if(m&&em[m[1]]){ add(em[m[1]], p.name, p.versionInfo); break; } } });
   }
   const seen = new Set();
   return out.filter(([e,n,v]) => { const k=e+'|'+n+'|'+v; if(seen.has(k))return false; seen.add(k); return true; });
@@ -207,12 +213,22 @@ document.getElementById('go').onclick = async () => {
   const text = document.getElementById('in').value;
   if (!text.trim()) { out.innerHTML = '<div class="card neutral">Paste a dependency file first.</div>'; return; }
 
+  if (new TextEncoder().encode(text).length > 2 * 1024 * 1024) {
+    out.textContent = 'This browser checker accepts up to 2 MiB of text. Use the CLI for larger files.';
+    return;
+  }
   let fmt = document.getElementById('fmt').value;
-  if (fmt === 'auto') fmt = detect(text);
-  const comps = parse(text, fmt);
+  let comps;
+  try {
+    if (fmt === 'auto') fmt = detect(text);
+    comps = parse(text, fmt);
+  } catch (error) {
+    out.textContent = 'Could not read this dependency file. Check the format or use the CLI.';
+    return;
+  }
 
   if (!comps.length) {
-    out.innerHTML = '<div class="card neutral"><h3>Nothing resolvable found</h3><p style="margin:0">I detected the format as <code>'+fmt+'</code> but couldn\'t pull pinned name/version pairs out of it. Try selecting the format explicitly, or use the CLI which handles more cases.</p></div>';
+    out.innerHTML = '<div class="card neutral"><h3>Nothing resolvable found</h3><p style="margin:0">I detected the format as <code>'+escapeHtml(fmt)+'</code> but couldn\'t pull pinned name/version pairs out of it. Try selecting the format explicitly, or use the CLI which handles more cases.</p></div>';
     return;
   }
 
@@ -270,14 +286,14 @@ document.getElementById('go').onclick = async () => {
 
     if (!findings.length) {
       html += '<div class="card clear"><h3>No known-exploited components found</h3>'
-        + '<p>Checked <strong>'+comps.length+'</strong> components against KEV catalogue <strong>'+K.catalogVersion+'</strong> ('+K.count+' entries). None appear on the known-exploited list.</p>'
+        + '<p>Checked <strong>'+comps.length+'</strong> components against KEV catalogue <strong>'+escapeHtml(K.catalogVersion)+'</strong> ('+escapeHtml(K.count)+' entries). None appear on the known-exploited list.</p>'
         + '<p style="margin:0">On this evidence there is no Article 14 reporting trigger from a KEV-listed dependency today.</p></div>';
       if (withAdv) html += '<div class="card neutral"><p style="margin:0"><strong>'+withAdv+'</strong> component(s) do carry published advisories that are <em>not</em> on the KEV list. That is ordinary patching work — not a reporting clock. Article 14 turns on active exploitation, not severity.</p></div>';
     } else {
       html += '<div class="card hit"><h3>'+findings.length+' known-exploited component'+(findings.length>1?'s':'')+' — decision required</h3>'
-        + '<p style="margin:0 0 4px">Checked '+comps.length+' components against KEV catalogue '+K.catalogVersion+'.</p></div>'
+        + '<p style="margin:0 0 4px">Checked '+comps.length+' components against KEV catalogue '+escapeHtml(K.catalogVersion)+'.</p></div>'
         + '<table><tr><th>CVE</th><th>Component</th><th>KEV listed</th><th>Ransomware</th></tr>'
-        + findings.map(f => '<tr><td class="mono">'+f.cve+'</td><td class="mono">'+f.comp[1]+' '+f.comp[2]+'</td><td>'+f.meta[3]+'</td><td>'+(f.meta[4]?'Known':'—')+'</td></tr>').join('')
+        + findings.map(f => '<tr><td class="mono">'+escapeHtml(f.cve)+'</td><td class="mono">'+escapeHtml(f.comp[1])+' '+escapeHtml(f.comp[2])+'</td><td>'+escapeHtml(f.meta[3])+'</td><td>'+(f.meta[4]?'Known':'—')+'</td></tr>').join('')
         + '</table>';
       const now = new Date();
       const fmtD = d => d.toISOString().replace('T',' ').slice(0,19) + ' UTC';
@@ -290,7 +306,7 @@ document.getElementById('go').onclick = async () => {
     }
     out.innerHTML = html;
   } catch (e) {
-    out.innerHTML = '<div class="card neutral"><h3>Check failed</h3><p style="margin:0">'+String(e).slice(0,200)+'</p><p class="small" style="margin:8px 0 0">The CLI works offline-ish and is more robust: <a href="https://github.com/ntoledo319/cra-watch">cra-watch</a></p></div>';
+    out.innerHTML = '<div class="card neutral"><h3>Check failed</h3><p style="margin:0">'+escapeHtml(String(e).slice(0,200))+'</p><p class="small" style="margin:8px 0 0">The CLI works offline-ish and is more robust: <a href="https://github.com/ntoledo319/cra-watch">cra-watch</a></p></div>';
   } finally {
     btn.disabled = false; btn.textContent = 'Check for known-exploited components';
     bar.style.display = 'none'; bar.firstElementChild.style.width = '0';
